@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { loginUser, signupUser } from "../api/api";
 import { MdClose } from "react-icons/md";
+import { setUser, setIsLoggedIn } from "../redux/Reducers/userSlice";
+import { useDispatch } from "react-redux";
 
-const Modal = ({ isOpen, onClose, onAuthenticate }) => {
+const Modal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const dispatch =  useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +32,8 @@ const Modal = ({ isOpen, onClose, onAuthenticate }) => {
 
       if (response.success) {
         if (isLogin) {
-          onAuthenticate(response.data);
+          dispatch(setUser(response.data.user));
+          dispatch(setIsLoggedIn(true));
           onClose();
         } else {
           alert("Registration successful! Please log in.");

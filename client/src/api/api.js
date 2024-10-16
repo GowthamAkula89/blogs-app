@@ -32,7 +32,7 @@ export const loginUser = async (credentials) => {
 
     if (res.data.token) {
       console.log(res.data.token)
-      localStorage.setItem("blogAuthToken", res.data.token);
+      localStorage.setItem("blogAuthToken", res.data.token.token);
       localStorage.setItem("userName", res.data.fullName); 
     }
 

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-export 
-
+import {Provider} from "react-redux";
+import store from "./redux/store";
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -13,16 +13,19 @@ const App = () => {
   },[])
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        {isLoggedIn &&
-          <>
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        }
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          {isLoggedIn &&
+            <>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </>
+          }
+        </Routes>
+      </Router>
+    </Provider>
+    
   );
 };
 

@@ -3,15 +3,14 @@ import { FaBlogger } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import Modal from "./Modal";
+import { useSelector } from "react-redux";
+
 const Header = ({setSelectedRegion}) => {
+    const user = useSelector((state) => state.user.user)
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
     const location = useLocation();
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('blogAuthToken') ? true:false);
     const [region, setRegion] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleAuthenticate = (user) => {
-        setIsLoggedIn(true);
-      };
 
     const handleSearch = () => {
         setSelectedRegion(region) 
@@ -46,7 +45,7 @@ const Header = ({setSelectedRegion}) => {
                         <button  onClick={() => setIsModalOpen(true)}>Sign In</button>
                         </>
                     ) : (
-                        <p>Welcome Gowtham</p>
+                        <p>Welcome {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</p>
                     )}
                 </div>
             </div>
@@ -54,7 +53,6 @@ const Header = ({setSelectedRegion}) => {
         <Modal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onAuthenticate={handleAuthenticate}
         />
         </>
     )

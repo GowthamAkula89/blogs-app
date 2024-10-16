@@ -2,10 +2,11 @@ import { useState} from "react";
 import { ClipLoader } from "react-spinners";
 import BlogCard from "./blogCard";
 import BlogModal from "./BlogModal";
+import { useSelector } from "react-redux";
 
 const BlogsContainer = ({ blogsData, setBlogsData, geoData }) => {
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const [showModal, setShowModal] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('blogAuthToken') !== null);
     const location = geoData?.location || "Unknown location";
     const country = geoData?.country || "Unknown country";
     const loading = geoData.loading;
@@ -70,8 +71,6 @@ const BlogsContainer = ({ blogsData, setBlogsData, geoData }) => {
         {showModal && (
                 <BlogModal
                     onClose={() => setShowModal(false)}
-                    authorId="670f2a474192f7267b845e81"
-                    authorName="gowtham"
                     region={geoData?.region || "Unknown Region"}
                     setBlogsData={setBlogsData}
                 />

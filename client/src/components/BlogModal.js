@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const BlogModal = ({ onClose, authorId, authorName, region, setBlogsData }) => {
+const BlogModal = ({ onClose, region, setBlogsData }) => {
+    const user = useSelector((state) => state.user.user);
     const [title, setTitle] = useState("");
     const [intro, setIntro] = useState("");
     const [body, setBody] = useState("");
@@ -11,8 +13,8 @@ const BlogModal = ({ onClose, authorId, authorName, region, setBlogsData }) => {
         e.preventDefault();
 
         const newBlog = {
-            author: authorId,
-            authorName: authorName,
+            author: user._id,
+            authorName: user.name,
             title: title,
             content: {
                 intro: intro,
