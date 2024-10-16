@@ -1,34 +1,43 @@
 import { useState} from "react";
 import { ClipLoader } from "react-spinners";
 import BlogCard from "./blogCard";
+import BlogModal from "./BlogModal";
 
 const BlogsContainer = ({ blogsData, setBlogsData, geoData }) => {
-  
+    const [showModal, setShowModal] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('blogAuthToken') !== null);
     const location = geoData?.location || "Unknown location";
     const country = geoData?.country || "Unknown country";
     const loading = geoData.loading;
 
-    const handleDelete = async (blogId) => {
-        if (window.confirm("Are you sure you want to delete this blog?")) {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API}blog/${blogId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('blogAuthToken')}`
-            },
-            });
-            if (response.ok) {
-                alert("Blog deleted successfully!");
-                setBlogsData(response.json())
-            } else {
-                alert("Error deleting the blog.");
+    const handleDelete = async (id) => {
+        const url = `${process.env.REACT_APP_API}blogs/${id}`;
+        const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
+        
+        if (confirmDelete) {
+            try {
+                const response = await fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('blogAuthToken')}`,
+                    },
+                });
+                if (response.ok) {
+                    setBlogsData((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+                    alert("Blog deleted successfully.");
+                } else {
+                    const errorData = await response.json(); // Only parse if the response isn't empty
+                    alert(errorData.message || "Failed to delete the blog.");
+                }
+            } catch (error) {
+                alert("An error occurred while deleting the blog: " + error.message);
             }
-        } catch (error) {
-            console.error("Error deleting blog:", error);
         }
-        }
+    };
+    
+    const handleCreateBlog = () => {
+        setShowModal(true);
     };
 
     return (
@@ -52,12 +61,21 @@ const BlogsContainer = ({ blogsData, setBlogsData, geoData }) => {
             </div>
         )}
         {isLoggedIn && (
-            <button
-            className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full"
+            <button className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full"
+            onClick={handleCreateBlog}
             >
-            Create Blog
+                Create Blog
             </button>
         )}
+        {showModal && (
+                <BlogModal
+                    onClose={() => setShowModal(false)}
+                    authorId="670f2a474192f7267b845e81"
+                    authorName="gowtham"
+                    region={geoData?.region || "Unknown Region"}
+                    setBlogsData={setBlogsData}
+                />
+            )}
         </div>
     );
 };

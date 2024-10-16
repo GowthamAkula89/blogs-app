@@ -31,8 +31,9 @@ export const loginUser = async (credentials) => {
     const res = await api.post(`/auth/login`, credentials);
 
     if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userName", res.data.fullName); // Store the user name
+      console.log(res.data.token)
+      localStorage.setItem("blogAuthToken", res.data.token);
+      localStorage.setItem("userName", res.data.fullName); 
     }
 
     return { success: true, data: res.data };
@@ -44,11 +45,6 @@ export const loginUser = async (credentials) => {
 export const signupUser = async (userData) => {
   try {
     const res = await api.post("/auth/register", userData);
-
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userName", res.data.fullName);
-    }
     return { success: true, data: res.data };
   } catch (error) {
     return handleError(error);
@@ -57,7 +53,7 @@ export const signupUser = async (userData) => {
 
 export const logoutUser = async () => {
   try {
-    localStorage.removeItem("token");
+    localStorage.removeItem("blogAuthToken");
     const res = await api.post("/auth/logout");
     return { success: true, data: res.data };
   } catch (error) {
@@ -87,8 +83,8 @@ export const fetchBlogById = async (id) => {
 
 // Fetch user blogs
 export const fetchBlogsByUser = async () => {
+  const token = localStorage.getItem("blogAuthToken")
   try {
-    const token = localStorage.getItem("token");
     const res = await api.get("/blogs/user", {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -99,8 +95,8 @@ export const fetchBlogsByUser = async () => {
 };
 
 export const createBlog = async (blogData) => {
+  const token = localStorage.getItem("blogAuthToken")
   try {
-    const token = localStorage.getItem("token");
     const res = await api.post("/blogs", blogData, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -111,8 +107,8 @@ export const createBlog = async (blogData) => {
 };
 
 export const updateBlog = async (id, blogData) => {
+  const token = localStorage.getItem("blogAuthToken")
   try {
-    const token = localStorage.getItem("token");
     const res = await api.put(`/blogs/${id}`, blogData, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -124,7 +120,8 @@ export const updateBlog = async (id, blogData) => {
 
 export const deleteBlog = async (id) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("blogAuthToken");
+    console.log(token)
     const res = await api.delete(`/blogs/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -133,4 +130,5 @@ export const deleteBlog = async (id) => {
     return handleError(error);
   }
 };
+
 

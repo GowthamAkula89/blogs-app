@@ -11,7 +11,6 @@ const Header = ({setSelectedRegion}) => {
 
     const handleAuthenticate = (user) => {
         setIsLoggedIn(true);
-        localStorage.setItem("blogAuthToken", JSON.stringify(user.token.token));
       };
 
     const handleSearch = () => {

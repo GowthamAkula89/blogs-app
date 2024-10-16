@@ -31,7 +31,7 @@ const HomePage = () => {
   },[])
 
   useEffect(() => {
-    const url = `${process.env.REACT_APP_API}blog/${selectedRegion}`;
+    const url = `${process.env.REACT_APP_API}blogs/${selectedRegion}`;
 
     async function fetchBlogs() {
       setLoading(true);
