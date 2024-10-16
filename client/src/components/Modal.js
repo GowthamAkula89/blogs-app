@@ -57,8 +57,8 @@ const Modal = ({ isOpen, onClose }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-1/3 relative">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
+          <div className="bg-white p-6 m-4 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl mb-4">{isLogin ? "Login" : "Register"}</h2>
             <button
               onClick={onClose}

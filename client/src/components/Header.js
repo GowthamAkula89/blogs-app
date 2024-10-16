@@ -26,12 +26,12 @@ const Header = ({setSelectedRegion}) => {
                 </div>
 
                 {location.pathname === "/" && (
-                    <div className="relative w-3/4">
+                    <div className="relative w-1/2 md:w-3/4">
                         <input
                             type="text"
                             value={region}
                             placeholder="Explore another location blogs"
-                            className="px-3 py-2 text-black rounded w-full outline-none"
+                            className="px-3 py-1 text-black rounded w-full outline-none pr-6"
                             onChange={(e) => setRegion(e.target.value)}
                         />
                         <IoIosSearch className="absolute right-1 top-2 w-6 h-6 text-black cursor-pointer" onClick={() => handleSearch()}/>
@@ -39,7 +39,7 @@ const Header = ({setSelectedRegion}) => {
                 
                 )}
 
-                <div>
+                <div className="text-sm md:text-lg">
                     {!isLoggedIn ? (
                         <>
                         <button  onClick={() => setIsModalOpen(true)}>Sign In</button>

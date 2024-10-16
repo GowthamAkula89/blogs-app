@@ -57,7 +57,7 @@ const BlogsContainer = ({ blogsData, setBlogsData, geoData }) => {
     };
 
     return (
-        <div className="container mx-auto my-8">
+        <div className="container mx-5  my-8">
             <h1 className="text-2xl font-bold mb-6">{`All blogs near you in ${location}, ${country}`}</h1>
             {loading ? (
                 <div className="flex justify-center items-center h-80">
