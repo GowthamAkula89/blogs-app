@@ -51,84 +51,84 @@ export const signupUser = async (userData) => {
   }
 };
 
-export const logoutUser = async () => {
-  try {
-    localStorage.removeItem("blogAuthToken");
-    const res = await api.post("/auth/logout");
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
+// Function to fetch all blogs 
+export const fetchBlogs = async (apiBaseUrl, token) => {
+  const url = `${apiBaseUrl}blogs/`;
+  const response = await fetch(url, {
+      method: "GET",
+      headers: {
+          "Authorization": `Bearer ${token}`,
+      },
+  });
+
+  if (!response.ok) {
+      throw new Error("Failed to fetch blogs.");
+  }
+
+  return response.json();
+};
+
+// Function to delete a blog by its ID
+export const deleteBlog = async (apiBaseUrl, id, token) => {
+  const url = `${apiBaseUrl}blogs/${id}`;
+  const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+  });
+
+  if (response.ok) {
+      if (response.status !== 204) {
+          try {
+              return await response.json();
+          } catch (error) {
+              return null;
+          }
+      }
+  } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete the blog.");
   }
 };
 
-// Blog API calls
+// Function to create a new blog
+export const createBlog = async (apiBaseUrl, blogData, token) => {
+  const url = `${apiBaseUrl}blogs/`;
+  const response = await fetch(url, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(blogData),
+  });
 
-export const fetchBlogsByLocation = async (location) => {
-  try {
-    const res = await api.get(`/blogs/${location}`);
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to create the blog.");
   }
+
+  return response.json();
 };
 
-export const fetchBlogById = async (id) => {
-  try {
-    const res = await api.get(`/blogs/${id}`);
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
+// Function to update an existing blog by its ID
+export const updateBlog = async (apiBaseUrl, id, blogData, token) => {
+  const url = `${apiBaseUrl}blogs/${id}`;
+  const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(blogData),
+  });
+
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update the blog.");
   }
+
+  return response.json();
 };
-
-// Fetch user blogs
-export const fetchBlogsByUser = async () => {
-  const token = localStorage.getItem("blogAuthToken")
-  try {
-    const res = await api.get("/blogs/user", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-export const createBlog = async (blogData) => {
-  const token = localStorage.getItem("blogAuthToken")
-  try {
-    const res = await api.post("/blogs", blogData, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-export const updateBlog = async (id, blogData) => {
-  const token = localStorage.getItem("blogAuthToken")
-  try {
-    const res = await api.put(`/blogs/${id}`, blogData, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-export const deleteBlog = async (id) => {
-  try {
-    const token = localStorage.getItem("blogAuthToken");
-    console.log(token)
-    const res = await api.delete(`/blogs/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return { success: true, data: res.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-
