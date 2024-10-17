@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { SnackbarProvider } from 'notistack';
 import HomePage from "./pages/HomePage";
 import Payment from "./pages/Payment";
 import {Provider} from "react-redux";
@@ -14,18 +14,21 @@ const App = () => {
   },[])
 
   return (
-    <Provider store={store}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          {isLoggedIn &&
-            <>
-              <Route path="/payment" element={<Payment />} />
-            </>
-          }
-        </Routes>
-      </Router>
-    </Provider>
+    <SnackbarProvider maxSnack={2} autoHideDuration={2000}>
+      <Provider store={store}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            {isLoggedIn &&
+              <>
+                <Route path="/payment" element={<Payment />} />
+              </>
+            }
+          </Routes>
+        </Router>
+      </Provider>
+    </SnackbarProvider>
+    
     
   );
 };

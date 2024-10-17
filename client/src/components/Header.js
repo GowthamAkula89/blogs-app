@@ -45,7 +45,7 @@ const Header = ({setSelectedRegion}) => {
                         <button  onClick={() => setIsModalOpen(true)}>Sign In</button>
                         </>
                     ) : (
-                        <p>Welcome {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</p>
+                        <p>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</p>
                     )}
                 </div>
             </div>

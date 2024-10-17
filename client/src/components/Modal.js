@@ -3,6 +3,7 @@ import { loginUser, signupUser } from "../api/api";
 import { MdClose } from "react-icons/md";
 import { setUser, setIsLoggedIn } from "../redux/Reducers/userSlice";
 import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 const Modal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,7 +11,7 @@ const Modal = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const {enqueueSnackbar} = useSnackbar()
   const dispatch =  useDispatch();
 
   const handleSubmit = async (e) => {
@@ -35,8 +36,9 @@ const Modal = ({ isOpen, onClose }) => {
           dispatch(setUser(response.data.user));
           dispatch(setIsLoggedIn(true));
           onClose();
+          enqueueSnackbar("Login successful", {variant:"success"})
         } else {
-          alert("Registration successful! Please log in.");
+          enqueueSnackbar("Registration successful! Please log in.", {variant:"success"})
           setIsLogin(true);
           setName(""); 
           setConfirmPassword(""); 
@@ -44,13 +46,16 @@ const Modal = ({ isOpen, onClose }) => {
           setPassword(""); 
         }
       } else {
-        alert(response.message || "An error occurred during authentication.");
+        enqueueSnackbar(response.message, {variant:"error"})
+        //alert(response.message || "An error occurred during authentication.");
       }
     } catch (error) {
-      alert(
-        "Error during authentication: " +
-          (error.response?.data?.message || error.message)
-      );
+      const message = "Error during authentication: " + (error.response?.data?.message || error.message)
+      enqueueSnackbar(message, {variant:"error"})
+      // alert(
+      //   "Error during authentication: " +
+      //     (error.response?.data?.message || error.message)
+      // );
     }
   };
 

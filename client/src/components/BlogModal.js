@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+
 const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     const [title, setTitle] = useState("");
     const [intro, setIntro] = useState("");

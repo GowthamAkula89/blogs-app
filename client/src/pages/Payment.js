@@ -5,6 +5,7 @@ import BlogCard from "../components/blogCard";
 import { createBlog } from "../api/api";
 import { useSelector, useDispatch } from "react-redux";
 import { setBlogsData } from "../redux/Reducers/blogsSlice";
+import { useSnackbar } from "notistack";
 
 const Payment = () => {
   const blogsData = useSelector((state)=> state.blogs.data)
@@ -12,7 +13,8 @@ const Payment = () => {
     const location = useLocation();
     const data = location.state || {};
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const {enqueueSnackbar} = useSnackbar()
 
     const handlePaymentSuccess = async () => {
         setPaymentSuccessful(true);
@@ -26,20 +28,19 @@ const Payment = () => {
     const handleFreeTrial = async () => {
       console.log("Free trail clicked")
         try {
-           const createdBlog = await createBlog(
-                process.env.REACT_APP_API,
-                data,
-                localStorage.getItem("blogAuthToken")
-            );
-            const updatedData = Array.isArray(blogsData) ? [createdBlog.blog, ...blogsData] : [createdBlog.blog]
-            dispatch(setBlogsData(updatedData));
-            
-            
-                navigate("/");
-                alert("Blog created successfully.");
+          const createdBlog = await createBlog(
+              process.env.REACT_APP_API,
+              data,
+              localStorage.getItem("blogAuthToken")
+          );
+          const updatedData = Array.isArray(blogsData) ? [createdBlog.blog, ...blogsData] : [createdBlog.blog]
+          dispatch(setBlogsData(updatedData));
+          navigate("/");
+          enqueueSnackbar("Blog created successfully.", {variant:"success"})
+          //alert("Blog created successfully.");
             
         } catch (error) {
-            console.error("Error creating blog with free trial:", error);
+          enqueueSnackbar("Error creating blog with free trial:", error, {variant:"error"})
         }
     };
 

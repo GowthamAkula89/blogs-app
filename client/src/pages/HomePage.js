@@ -3,10 +3,11 @@ import Header from "../components/Header"
 import BlogsContainer from "../components/BlogsContainer";
 import { setBlogsData } from "../redux/Reducers/blogsSlice";
 import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 const HomePage = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
-  //const [blogsData, setBlogsData] = useState([]);
+  const {enqueueSnackbar} = useSnackbar()
   const [country, setCountry] = useState("")
   const [loading, setLoading] = useState(false);
   const geoData = {
@@ -15,6 +16,7 @@ const HomePage = () => {
     loading: loading
   }
   const dispatch = useDispatch();
+
   useEffect(() => {
     const getUserLocationByIP = async () => {
       try {
@@ -42,6 +44,7 @@ const HomePage = () => {
         const data = await res.json();
         dispatch(setBlogsData(data));
       } catch (error) {
+        enqueueSnackbar("Error fetching blogs", {variant:"error"})
         console.error("Error fetching blogs:", error);
       }finally{
         setLoading(false);

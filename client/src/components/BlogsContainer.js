@@ -3,9 +3,10 @@ import { ClipLoader } from "react-spinners";
 import BlogCard from "./blogCard";
 import BlogModal from "./BlogModal";
 import { useNavigate } from "react-router-dom";
-import { deleteBlog, updateBlog, createBlog } from "../api/api";
+import { deleteBlog, updateBlog } from "../api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setBlogsData } from "../redux/Reducers/blogsSlice";
+import { useSnackbar } from "notistack";
 
 const BlogsContainer = ({ geoData }) => {
 
@@ -15,6 +16,7 @@ const BlogsContainer = ({ geoData }) => {
     const [isEdit, setIsEdit] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {enqueueSnackbar} = useSnackbar()
 
     const location = geoData?.location || "Unknown location";
     const country = geoData?.country || "Unknown country";
@@ -27,9 +29,11 @@ const BlogsContainer = ({ geoData }) => {
         await deleteBlog(process.env.REACT_APP_API, id, localStorage.getItem("blogAuthToken"));
         const filterData = blogsData.filter((blog) => blog._id !== id);
         dispatch(setBlogsData(filterData));
-        alert("Blog deleted successfully.");
+        enqueueSnackbar("Blog deleted successfully.", {variant:"success"})
+        //alert("Blog deleted successfully.");
       } catch (error) {
-        alert("An error occurred while deleting the blog: " + error.message);
+        enqueueSnackbar("An error occurred while deleting the blog: " + error.message, {variant:"error"})
+        //alert("An error occurred while deleting the blog: " + error.message);
       }
     }
   };
@@ -45,7 +49,8 @@ const handleSaveBlog = async (newBlog) => {
             );
             const updatedData = Array.isArray(blogsData) ? blogsData.map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog)) : []
             dispatch(setBlogsData(updatedData));
-            alert("Blog updated successfully.");
+            enqueueSnackbar("Blog updated successfully.", {variant:"success"})
+            //alert("Blog updated successfully.");
         } else {
             navigate("/payment", { state: newBlog });
             // const createdBlog = await createBlog(
@@ -58,7 +63,8 @@ const handleSaveBlog = async (newBlog) => {
             // alert("Blog created successfully.");
         }
     } catch (error) {
-        alert("An error occurred while saving the blog: " + error.message);
+        enqueueSnackbar("An error occurred while saving the blog: " + error.message, {variant:"error"})
+        //alert("An error occurred while saving the blog: " + error.message);
     }
 };
 
@@ -76,7 +82,7 @@ const handleSaveBlog = async (newBlog) => {
   };
 
   return (
-    <div className="container mx-5 my-8">
+    <div className="container px-4 my-8">
       <h1 className="text-2xl font-bold mb-6">{`All blogs near you in ${location}, ${country}`}</h1>
       {loading ? (
         <div className="flex justify-center items-center h-80">
