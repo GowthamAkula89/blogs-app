@@ -10,9 +10,10 @@ import { ClipLoader } from "react-spinners";
 
 const Payment = () => {
   const blogsData = useSelector((state)=> state.blogs.data)
+  const data = useSelector((state) => state.blogs.newBlog)
     const navigate = useNavigate();
-    const location = useLocation();
-    const [data, setData] = useState(location.state || {});
+    //const location = useLocation();
+    //const [data, setData] = useState(location.state || {});
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();

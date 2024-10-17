@@ -4,6 +4,7 @@ const blogsSlice = createSlice({
     name: 'blogs',
     initialState: {
         data: [],
+        newBlog:{}
     },
     reducers: {
         setBlogsData: (state, action) => {
@@ -11,13 +12,17 @@ const blogsSlice = createSlice({
         },
         addBlog:(state, action) => {
             state.data.push(action.payload)
+        },
+        setNewBlog: (state, action) => {
+            state.newBlog = action.payload
         }
     },
 });
 
 export const {
     setBlogsData,
-    addBlog
+    addBlog,
+    setNewBlog
 } = blogsSlice.actions;
 
 export default blogsSlice.reducer;

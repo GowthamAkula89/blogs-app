@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { useSnackbar } from "notistack";
+import { setNewBlog } from "../redux/Reducers/blogsSlice";
+import { useDispatch } from "react-redux";
 
 const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     const [title, setTitle] = useState("");
@@ -7,6 +10,8 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     const [body, setBody] = useState("");
     const [coverImage, setCoverImage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {enqueueSnackbar} = useSnackbar();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isEdit && blog) {
@@ -23,6 +28,10 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     }, [isEdit, blog]);
 
     const handleSave = async() => {
+        if(title === "" || intro === "" || body === "") {
+            enqueueSnackbar("Fill all required fields ", {variant:"warning"});
+            return;
+        }
         setLoading(true);
         const blogData = {
             title,
@@ -33,6 +42,9 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
             coverImage,
             region : `${geoData.location}`
         };
+        if(!isEdit){
+            dispatch(setNewBlog(blogData));
+        }
         await onSave(blogData);
         setLoading(false);
         onClose();
@@ -44,19 +56,19 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
                 <h2 className="text-xl font-bold mb-4">{isEdit ? "Edit Blog" : "Create new Blog"}</h2>
                 <input
                     type="text"
-                    placeholder="Blog Title"
+                    placeholder="Blog Title*"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full mb-2 p-2 border border-gray-300 rounded"
                 />
                 <textarea
-                    placeholder="Intro"
+                    placeholder="Intro*"
                     value={intro}
                     onChange={(e) => setIntro(e.target.value)}
                     className="w-full mb-2 p-2 border border-gray-300 rounded"
                 />
                 <textarea
-                    placeholder="Body"
+                    placeholder="Body*"
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     className="w-full mb-2 p-2 border border-gray-300 rounded"
