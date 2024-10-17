@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import BlogCard from "../components/blogCard";
@@ -12,11 +12,18 @@ const Payment = () => {
   const blogsData = useSelector((state)=> state.blogs.data)
     const navigate = useNavigate();
     const location = useLocation();
-    const data = location.state || {};
+    const [data, setData] = useState(location.state || {});
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const {enqueueSnackbar} = useSnackbar()
+
+    useEffect(() => {
+      if (!data || Object.keys(data).length === 0) {
+        navigate("/");
+      }
+    }, [data, navigate]);
+    
 
     const handlePaymentSuccess = async () => {
         setPaymentSuccessful(true);
