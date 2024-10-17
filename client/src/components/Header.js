@@ -3,7 +3,9 @@ import { FaBlogger } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import Modal from "./Modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { FiLogOut } from "react-icons/fi";
+import { setUser, setIsLoggedIn } from "../redux/Reducers/userSlice";
 
 const Header = ({setSelectedRegion}) => {
     const user = useSelector((state) => state.user.user)
@@ -11,11 +13,19 @@ const Header = ({setSelectedRegion}) => {
     const location = useLocation();
     const [region, setRegion] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
 
     const handleSearch = () => {
         setSelectedRegion(region) 
         setRegion("")
     }
+
+    const handleLogout = () => {
+        localStorage.removeItem("blogAuthToken");
+        dispatch(setUser({}));
+        dispatch(setIsLoggedIn(false));
+    };
+
     return (
         <>
         <nav className="bg-green-950 p-3 text-white ">
@@ -45,7 +55,14 @@ const Header = ({setSelectedRegion}) => {
                         <button  onClick={() => setIsModalOpen(true)}>Sign In</button>
                         </>
                     ) : (
-                        <p>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</p>
+                        <div className="flex items-center gap-2">
+                            <p>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</p>
+                            <FiLogOut
+                                onClick={handleLogout}
+                                className="w-6 h-6 cursor-pointer"
+                                title="Logout"
+                            />
+                        </div>
                     )}
                 </div>
             </div>
