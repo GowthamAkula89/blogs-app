@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+import { ClipLoader } from "react-spinners";
 
 const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     const [title, setTitle] = useState("");
     const [intro, setIntro] = useState("");
     const [body, setBody] = useState("");
     const [coverImage, setCoverImage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (isEdit && blog) {
@@ -21,7 +22,8 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
         }
     }, [isEdit, blog]);
 
-    const handleSave = () => {
+    const handleSave = async() => {
+        setLoading(true);
         const blogData = {
             title,
             content: {
@@ -31,7 +33,8 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
             coverImage,
             region : `${geoData.location}`
         };
-        onSave(blogData);
+        await onSave(blogData);
+        setLoading(false);
         onClose();
     };
 
@@ -68,16 +71,15 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
 
                 <div className="flex justify-end">
                     <button
-                        onClick={onClose}
-                        className="mr-2 bg-gray-300 text-gray-800 p-2 rounded"
-                    >
-                        Cancel
-                    </button>
-                    <button
                         onClick={handleSave}
-                        className="bg-blue-500 text-white p-2 rounded"
+                        className="bg-blue-500 text-white p-2 rounded flex items-center justify-center"
+                        disabled={loading}
                     >
-                        {isEdit ? "Save" : "Create"}
+                        {loading ? (
+                            <ClipLoader color="#ffffff" size={20} />
+                        ) : (
+                            isEdit ? "Save" : "Create"
+                        )}
                     </button>
                 </div>
             </div>

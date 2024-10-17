@@ -6,6 +6,7 @@ import { createBlog } from "../api/api";
 import { useSelector, useDispatch } from "react-redux";
 import { setBlogsData } from "../redux/Reducers/blogsSlice";
 import { useSnackbar } from "notistack";
+import { ClipLoader } from "react-spinners";
 
 const Payment = () => {
   const blogsData = useSelector((state)=> state.blogs.data)
@@ -13,6 +14,7 @@ const Payment = () => {
     const location = useLocation();
     const data = location.state || {};
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const {enqueueSnackbar} = useSnackbar()
 
@@ -26,6 +28,7 @@ const Payment = () => {
     };
 
     const handleFreeTrial = async () => {
+      setLoading(true);
       console.log("Free trail clicked")
         try {
           const createdBlog = await createBlog(
@@ -35,12 +38,15 @@ const Payment = () => {
           );
           const updatedData = Array.isArray(blogsData) ? [createdBlog.blog, ...blogsData] : [createdBlog.blog]
           dispatch(setBlogsData(updatedData));
+          setLoading(false);
           navigate("/");
           enqueueSnackbar("Blog created successfully.", {variant:"success"})
           //alert("Blog created successfully.");
             
         } catch (error) {
           enqueueSnackbar("Error creating blog with free trial:", error, {variant:"error"})
+        } finally{
+          setLoading(false);
         }
     };
 
@@ -87,8 +93,13 @@ const Payment = () => {
                         <button
                             className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg shadow-md transition duration-200"
                             onClick={handleFreeTrial}
+                            disabled={loading}
                         >
-                            Free Trial
+                          {loading ? (
+                              <ClipLoader color="#ffffff" size={20} />
+                          ) : (
+                              "Free Trail"
+                          )}
                         </button>
                     </div>
                 </div>
