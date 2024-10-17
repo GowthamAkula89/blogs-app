@@ -1,7 +1,9 @@
 //import { combineReducers } from "redux";
 import userSlice from "./userSlice";
+import blogsSlice from "./blogsSlice";
 
 const rootReducer = {
-    user : userSlice
+    user : userSlice,
+    blogs: blogsSlice
 }
 export default rootReducer;

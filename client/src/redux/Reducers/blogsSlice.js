@@ -6,14 +6,18 @@ const blogsSlice = createSlice({
         data: [],
     },
     reducers: {
-        setBlogs: (state, action) => {
-        state.data = action.payload;
+        setBlogsData: (state, action) => {
+            state.data = action.payload;
+        },
+        addBlog:(state, action) => {
+            state.data.push(action.payload)
         }
     },
 });
 
 export const {
-    setBlogs,
+    setBlogsData,
+    addBlog
 } = blogsSlice.actions;
 
 export default blogsSlice.reducer;

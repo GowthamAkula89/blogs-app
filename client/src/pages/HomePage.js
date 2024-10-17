@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import Header from "../components/Header"
 import BlogsContainer from "../components/BlogsContainer";
+import { setBlogsData } from "../redux/Reducers/blogsSlice";
+import { useDispatch } from "react-redux";
 
 const HomePage = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [blogsData, setBlogsData] = useState([]);
+  //const [blogsData, setBlogsData] = useState([]);
   const [country, setCountry] = useState("")
   const [loading, setLoading] = useState(false);
   const geoData = {
@@ -12,7 +14,7 @@ const HomePage = () => {
     country: country,
     loading: loading
   }
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getUserLocationByIP = async () => {
       try {
@@ -38,7 +40,7 @@ const HomePage = () => {
       try {
         const res = await fetch(url);
         const data = await res.json();
-        setBlogsData(data);
+        dispatch(setBlogsData(data));
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }finally{
@@ -53,7 +55,7 @@ const HomePage = () => {
   return(
     <div className="">
       <Header setSelectedRegion={setSelectedRegion}/>
-      <BlogsContainer blogsData={blogsData} setBlogsData={setBlogsData} geoData={geoData} loading={loading}/>
+      <BlogsContainer geoData={geoData} loading={loading}/>
     </div>
   )
 }

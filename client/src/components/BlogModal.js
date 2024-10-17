@@ -37,7 +37,7 @@ const BlogModal = ({ isOpen, onClose, onSave, blog, isEdit, geoData }) => {
     return isOpen ? (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
             <div className="bg-white p-6 m-4 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-xl font-bold mb-4">{isEdit ? "Edit Blog" : "Create Blog"}</h2>
+                <h2 className="text-xl font-bold mb-4">{isEdit ? "Edit Blog" : "Create new Blog"}</h2>
                 <input
                     type="text"
                     placeholder="Blog Title"
