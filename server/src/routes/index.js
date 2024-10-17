@@ -4,5 +4,5 @@ const authRoute = require("./auth.route")
 const router = express.Router();
 
 router.use("/auth", authRoute);
-router.use("/blog", blogRoute);
+router.use("/blogs", blogRoute);
 module.exports = router;
