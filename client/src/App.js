@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import Payment from "./pages/Payment";
 import {Provider} from "react-redux";
 import store from "./redux/store";
 const App = () => {
@@ -19,7 +20,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           {isLoggedIn &&
             <>
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/payment" element={<Payment />} />
             </>
           }
         </Routes>

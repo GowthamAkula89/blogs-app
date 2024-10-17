@@ -10,17 +10,17 @@ import { setBlogsData } from "../redux/Reducers/blogsSlice";
 const BlogsContainer = ({ geoData }) => {
 
     const blogsData = useSelector((state) => state.blogs.data || []);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBlog, setSelectedBlog] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  const location = geoData?.location || "Unknown location";
-  const country = geoData?.country || "Unknown country";
-  const loading = geoData?.loading || false;
+    const location = geoData?.location || "Unknown location";
+    const country = geoData?.country || "Unknown country";
+    const loading = geoData?.loading || false;
 
-  const handleDelete = async (id) => {
+    const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
     if (confirmDelete) {
       try {
@@ -47,14 +47,15 @@ const handleSaveBlog = async (newBlog) => {
             dispatch(setBlogsData(updatedData));
             alert("Blog updated successfully.");
         } else {
-            const createdBlog = await createBlog(
-                process.env.REACT_APP_API,
-                newBlog,
-                localStorage.getItem("blogAuthToken")
-            );
-            const updatedData = Array.isArray(blogsData) ? [createdBlog.blog, ...blogsData] : [createdBlog.blog]
-            dispatch(setBlogsData(updatedData));
-            alert("Blog created successfully.");
+            navigate("/payment", { state: newBlog });
+            // const createdBlog = await createBlog(
+            //     process.env.REACT_APP_API,
+            //     newBlog,
+            //     localStorage.getItem("blogAuthToken")
+            // );
+            // const updatedData = Array.isArray(blogsData) ? [createdBlog.blog, ...blogsData] : [createdBlog.blog]
+            // dispatch(setBlogsData(updatedData));
+            // alert("Blog created successfully.");
         }
     } catch (error) {
         alert("An error occurred while saving the blog: " + error.message);
